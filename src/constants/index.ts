@@ -22,3 +22,9 @@ export enum AVAILABLE_RESOLUTIONS {
 export const RouterPaths = {
   videos: '/videos',
 };
+
+export const ERROR_MESSAGES = {
+  typeofString: 'Type of value should be string',
+  typeofBoolean: '',
+  allRequiredFields: 'All required fields should be filled',
+};

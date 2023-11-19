@@ -2,34 +2,24 @@
 // @ts-ignore
 import supertest from 'supertest';
 import { Response } from 'superagent';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import _ from 'lodash';
-import { HTTP_STATUSES } from '../../../src/constants';
+import { HTTP_STATUSES } from '../../src/constants';
 
-type TRequest = supertest.SuperTest<supertest.Test>;
-
-interface IResponse<TBody> extends Omit<Response, 'body'> {
+export interface IResponse<TBody> extends Omit<Response, 'body'> {
   body: TBody;
 }
 
-type TKeys<T> = keyof T;
+type TRequest = supertest.SuperTest<supertest.Test>;
 
-interface ICreateEntityParams<TEntity> {
-  entityKeys?: TKeys<TEntity>[];
-  wrongBody?: Record<string, any>;
-}
-
-interface ITestManagerParams<TEntity> {
+export interface ITestManagerParams {
   defaultRouter: string;
-  entity: TEntity;
+  request: TRequest;
 }
 
 class TestManager<TEntity extends object> {
   /**
    * Entity
    */
-  public entity: TEntity;
+  public entity: TEntity | Record<any, any> = {};
 
   /**
    * Default router
@@ -44,11 +34,8 @@ class TestManager<TEntity extends object> {
   /**
    * Constructor
    */
-  constructor(request: TRequest, params: ITestManagerParams<TEntity>) {
-    const { defaultRouter, entity } = params ?? {};
-
+  constructor({ request, defaultRouter }: ITestManagerParams) {
     this.request = request;
-    this.entity = entity;
     this.defaultRouter = defaultRouter;
   }
 
@@ -62,25 +49,17 @@ class TestManager<TEntity extends object> {
   /**
    * Get entities
    */
-  public getEntities = async (): Promise<IResponse<TEntity>> => {
+  protected getEntities = async (): Promise<IResponse<TEntity[]>> => {
     return this.request.get(this.defaultRouter);
   };
 
   /**
    * Create entity
    */
-  public createEntity = async (
-    params: ICreateEntityParams<TEntity>
+  protected createEntity = async (
+    data: Partial<TEntity>
   ): Promise<IResponse<TEntity>> => {
-    const { entityKeys, wrongBody } = params ?? {};
-
-    if (wrongBody) {
-      return this.request.post(this.defaultRouter).send(wrongBody);
-    }
-
-    const res = await this.request
-      .post(this.defaultRouter)
-      .send(_.pick(this.entity, entityKeys ?? 'id'));
+    const res = await this.request.post(this.defaultRouter).send(data);
 
     if (res.statusCode === HTTP_STATUSES.CREATED_201) {
       this.setEntity(res.body);
@@ -92,7 +71,7 @@ class TestManager<TEntity extends object> {
   /**
    * Get single entity by id
    */
-  public getSingleEntity = async (
+  protected getSingleEntity = async (
     searchKey: keyof TEntity
   ): Promise<IResponse<TEntity>> => {
     const response = await this.request.get(
@@ -109,7 +88,7 @@ class TestManager<TEntity extends object> {
   /**
    * Update entity
    */
-  public updateEntity = async <TBody>(
+  protected updateEntity = async <TBody>(
     body: TBody & Record<string, any>,
     searchKey: keyof TEntity
   ): Promise<IResponse<TEntity>> => {
@@ -127,7 +106,7 @@ class TestManager<TEntity extends object> {
   /**
    * Set entity
    */
-  public setEntity = (entity: TEntity) => {
+  protected setEntity = (entity: TEntity) => {
     this.entity = entity;
   };
 }
