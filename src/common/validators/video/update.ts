@@ -1,45 +1,57 @@
-import { IVideoUpdate } from '../../features/videos/models/update';
-import { AVAILABLE_RESOLUTIONS } from '../../constants';
-import { array, string } from '../validators/scheme';
-import { IErrorField } from '../../interfaces';
-import generateKeys from './generate-keys';
+import generateKeys from '../../helpers/generate-keys';
+import { IErrorField } from '../../../interfaces';
+import { string } from '../schemas/string';
+import { array } from '../schemas/array';
+import { IVideoUpdate } from '../../../features/videos/models/update';
+import { AVAILABLE_RESOLUTIONS } from '../../../constants';
 
 /**
  * Validation input params for video entity
  */
 const updateVideoValidation = (videoParams: IVideoUpdate): IErrorField[] => {
+  const requiredFields: (keyof IVideoUpdate)[] = [
+    'availableResolutions',
+    'canBeDownloaded',
+    'minAgeRestriction',
+    'publicationDate',
+    'author',
+    'title',
+  ];
   const keys = generateKeys<IVideoUpdate>(videoParams);
+  const isFillRequired = requiredFields.every((field) => keys.includes(field));
 
-  if (keys?.length === 0) {
+  if (!isFillRequired) {
     return [{ field: 'all', message: 'All required fields should be filled' }];
   }
 
   return keys
     .map((key) => {
+      const value = videoParams[key];
+
       switch (key) {
         case 'title': {
           return (
-            !(
-              typeof videoParams[key] === 'string' && string(videoParams[key])
-            ) && { field: 'title', message: 'Invalid field' }
+            !(typeof value === 'string' && string(value)) && {
+              field: 'title',
+              message: 'Invalid field',
+            }
           );
         }
 
         case 'author': {
           return (
-            !(
-              typeof videoParams[key] === 'string' && string(videoParams[key])
-            ) && { field: 'author', message: 'Invalid field' }
+            !(typeof value === 'string' && string(value)) && {
+              field: 'author',
+              message: 'Invalid field',
+            }
           );
         }
 
         case 'availableResolutions': {
-          const availableResolutions = videoParams[key];
-
           return (
             !(
-              Array.isArray(availableResolutions) &&
-              array(availableResolutions, Object.values(AVAILABLE_RESOLUTIONS))
+              Array.isArray(value) &&
+              array(value, Object.values(AVAILABLE_RESOLUTIONS))
             ) && { field: 'availableResolutions', message: 'Invalid values' }
           );
         }

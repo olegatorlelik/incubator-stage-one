@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+    branches: [prod]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Push to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_SERVER }}
+          username: ${{ secrets.USERNAME_SERVER }}
+          key: ${{ secrets.SSH_KEY }}
+          script:
+            rm -rf ~/incubator-stage-one;
+            git clone git@github.com:olegatorlelik/incubator-stage-one.git;
+            bash ~/incubator-stage-one/build.sh
