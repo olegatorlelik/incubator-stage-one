@@ -7,6 +7,11 @@ const app = express();
 
 app.use(express.json());
 
+app.get('/', (req, res) => {
+  res.write('hello world');
+  res.end();
+});
+
 app.use(RouterPaths.videos, videoRoutes);
 app.use(globalErrorHandler);
 
