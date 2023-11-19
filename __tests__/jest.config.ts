@@ -4,11 +4,9 @@ export default {
   testEnvironment: 'node',
   clearMocks: true,
   coverageProvider: 'v8',
-  testMatch: [
-    '**/__tests__/**/*.+(ts|tsx|js)',
-    '**/?(*.)+(spec|test).+(ts|tsx|js)',
-  ],
+  testRegex: '.e2e.ts$',
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',
   },
+  modulePathIgnorePatterns: ['<rootDir>/dist/'],
 };

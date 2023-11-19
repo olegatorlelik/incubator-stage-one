@@ -5,10 +5,10 @@ import { TTypedRequest, TTypedRequestParams } from '../../../types';
 import { TVideoUriParams } from '../models/uri-params';
 import { IVideoCreate } from '../models/create';
 import { IVideoUpdate } from '../models/update';
-import updateVideoValidation from '../../../common/helpers/update-video-validation';
 import VideoRepository from '../repositories';
-import createVideoValidation from '../../../common/helpers/create-video-validation';
 import CustomError from '../../../common/services/custom-error';
+import createVideoValidation from '../../../common/validators/video/create';
+import updateVideoValidation from '../../../common/validators/video/update';
 
 const router = Router();
 const videoRepository = new VideoRepository();

@@ -9,7 +9,7 @@
     "watch": "tsc -w",
     "build": "tsc",
     "start": "node dist/index.js",
-    "test": "jest --detecteOpenHandles --no-cache --watchAll"
+    "test-e2e": "jest --no-cache --watchAll --config ./__tests__/jest.config.ts"
   },
   "dependencies": {
     "express": "^4.18.2",
