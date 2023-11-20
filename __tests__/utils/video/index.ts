@@ -94,11 +94,11 @@ class VideoTestManager extends TestManager<IVideoView> {
       return;
     }
 
-    const { statusCode: updateStatusCode, body: updatedBody } =
+    const { statusCode: updateStatusCode } =
       await this.updateEntity<IVideoUpdate>(
         {
           title: 'New video title',
-          publicationDate: new Date(),
+          publicationDate: new Date().toISOString(),
           minAgeRestriction: 2,
           canBeDownloaded: true,
           author: 'New Author',
@@ -107,8 +107,7 @@ class VideoTestManager extends TestManager<IVideoView> {
         'id'
       );
 
-    expect(updateStatusCode).toBe(HTTP_STATUSES.OK_200);
-    expect(updatedBody).toStrictEqual(this.entity);
+    expect(updateStatusCode).toBe(HTTP_STATUSES.NO_CONTENT_204);
   };
 
   /**

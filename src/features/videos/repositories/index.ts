@@ -4,22 +4,19 @@ import { IVideoCreate } from '../models/create';
 
 class VideoRepository {
   /**
-   * Videos
-   */
-  public videos = db.videos;
-
-  /**
    * Get all videos
    */
   get getVideos(): IVideoView[] {
-    return this.videos;
+    return db.getData('videos');
   }
 
   /**
    * Get video bi id
    */
   public getVideoById = (id: string): IVideoView | void => {
-    const video = this.videos.find(({ id: vId }) => Number(id) === vId);
+    const videos = db.getData('videos');
+
+    const video = videos.find(({ id: vId }) => Number(id) === vId);
 
     if (!video) {
       return;
@@ -32,36 +29,45 @@ class VideoRepository {
    * Update video
    */
   public updateVideo = (video: IVideoView): void => {
-    const updatedVideos = this.videos.map((elem) =>
+    const videos = db.getData('videos');
+
+    const updatedVideos = videos.map((elem) =>
       video.id === elem.id ? video : elem
     );
 
-    this.setVideos(updatedVideos);
+    db.updateData('videos', updatedVideos);
   };
 
   /**
    * Remove video by id
    */
   public removeVideoById = (id: string): void => {
-    const videos = this.videos.filter((video) => video.id !== Number(id));
+    const videos = db.getData('videos');
 
-    this.setVideos(videos);
+    const updatedVideos = videos.filter((video) => video.id !== Number(id));
+
+    db.updateData('videos', updatedVideos);
   };
 
   /**
    * Create new video
    */
   public createVideo = (video: IVideoCreate): IVideoView | void => {
-    const id = this.videos.length + 1;
+    const videos = db.getData('videos');
 
-    this.videos.push({
-      id,
-      ...video,
-      createdAt: new Date(),
-      publicationDate: new Date(),
-      minAgeRestriction: null,
-      canBeDownloaded: false,
-    });
+    const id = videos.length + 1;
+
+    db.updateData('videos', [
+      ...videos,
+      {
+        id,
+        ...video,
+        createdAt: new Date().toISOString(),
+        publicationDate: new Date().toISOString(),
+        minAgeRestriction: null,
+        canBeDownloaded: false,
+      },
+    ]);
 
     const newVideo = this.getVideoById(id.toString());
 
@@ -75,14 +81,7 @@ class VideoRepository {
   /**
    * Clear video store
    */
-  public clearVideoStore = (): void => this.setVideos([]);
-
-  /**
-   * Set new videos
-   */
-  private setVideos = (videos: IVideoView[]): void => {
-    this.videos = videos;
-  };
+  public clearVideoStore = (): void => db.updateData('videos', []);
 }
 
 export default VideoRepository;
