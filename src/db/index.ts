@@ -8,8 +8,8 @@ const db = {
       author: 'J.D. Salinger',
       canBeDownloaded: true,
       minAgeRestriction: null,
-      createdAt: new Date('2023-10-14T12:23:48.730Z'),
-      publicationDate: new Date('2023-10-14T12:23:48.730Z'),
+      createdAt: '2023-10-14T12:23:48.730Z',
+      publicationDate: '2023-10-14T12:23:48.730Z',
       availableResolutions: [AVAILABLE_RESOLUTIONS.P144],
     },
     {
@@ -18,8 +18,8 @@ const db = {
       author: 'Harper Lee',
       canBeDownloaded: true,
       minAgeRestriction: 2,
-      createdAt: new Date('2023-10-14T12:23:48.730Z'),
-      publicationDate: new Date('2023-10-14T12:23:48.730Z'),
+      createdAt: '2023-10-14T12:23:48.730Z',
+      publicationDate: '2023-10-14T12:23:48.730Z',
       availableResolutions: [AVAILABLE_RESOLUTIONS.P144],
     },
     {
@@ -28,83 +28,57 @@ const db = {
       author: 'George Orwell',
       canBeDownloaded: true,
       minAgeRestriction: null,
-      createdAt: new Date('2023-10-14T12:23:48.730Z'),
-      publicationDate: new Date('2023-10-14T12:23:48.730Z'),
-      availableResolutions: [AVAILABLE_RESOLUTIONS.P144],
-    },
-    {
-      id: 4,
-      title: 'The Great Gatsby',
-      author: 'F. Scott Fitzgerald',
-      canBeDownloaded: true,
-      minAgeRestriction: null,
-      createdAt: new Date('2023-10-14T12:23:48.730Z'),
-      publicationDate: new Date('2023-10-14T12:23:48.730Z'),
-      availableResolutions: [AVAILABLE_RESOLUTIONS.P144],
-    },
-    {
-      id: 5,
-      title: 'Moby-Dick',
-      author: 'Herman Melville',
-      canBeDownloaded: true,
-      minAgeRestriction: null,
-      createdAt: new Date('2023-10-14T12:23:48.730Z'),
-      publicationDate: new Date('2023-10-14T12:23:48.730Z'),
-      availableResolutions: [AVAILABLE_RESOLUTIONS.P144],
-    },
-    {
-      id: 6,
-      title: 'The Lord of the Rings',
-      author: 'J.R.R. Tolkien',
-      canBeDownloaded: true,
-      minAgeRestriction: null,
-      createdAt: new Date('2023-10-14T12:23:48.730Z'),
-      publicationDate: new Date('2023-10-14T12:23:48.730Z'),
-      availableResolutions: [AVAILABLE_RESOLUTIONS.P144],
-    },
-    {
-      id: 7,
-      title: 'Pride and Prejudice',
-      author: 'Jane Austen',
-      canBeDownloaded: true,
-      minAgeRestriction: null,
-      createdAt: new Date('2023-10-14T12:23:48.730Z'),
-      publicationDate: new Date('2023-10-14T12:23:48.730Z'),
-      availableResolutions: [AVAILABLE_RESOLUTIONS.P144],
-    },
-    {
-      id: 8,
-      title: 'The Odyssey',
-      author: 'Homer',
-      canBeDownloaded: true,
-      minAgeRestriction: null,
-      createdAt: new Date('2023-10-14T12:23:48.730Z'),
-      publicationDate: new Date('2023-10-14T12:23:48.730Z'),
-      availableResolutions: [AVAILABLE_RESOLUTIONS.P144],
-    },
-    {
-      id: 9,
-      title: 'War and Peace',
-      author: 'Leo Tolstoy',
-      canBeDownloaded: true,
-      minAgeRestriction: null,
-      createdAt: new Date('2023-10-14T12:23:48.730Z'),
-      publicationDate: new Date('2023-10-14T12:23:48.730Z'),
-      availableResolutions: [AVAILABLE_RESOLUTIONS.P144],
-    },
-    {
-      id: 10,
-      title: 'Frankenstein',
-      author: 'Mary Shelley',
-      canBeDownloaded: true,
-      minAgeRestriction: null,
-      createdAt: new Date('2023-10-14T12:23:48.730Z'),
-      publicationDate: new Date('2023-10-14T12:23:48.730Z'),
+      createdAt: '2023-10-14T12:23:48.730Z',
+      publicationDate: '2023-10-14T12:23:48.730Z',
       availableResolutions: [AVAILABLE_RESOLUTIONS.P144],
     },
   ],
 };
 
-export type TDataBase = typeof db;
+type TData = typeof db;
+type TDataKeys = keyof TData;
+type TDataValue = TData[TDataKeys];
 
-export default db;
+class MockDatabase {
+  /**
+   * Instance of mock database
+   */
+  private static instance: MockDatabase | null = null;
+
+  /**
+   * Data
+   */
+  private data: TData | Record<string, any> = {};
+
+  /**
+   * Constructor
+   */
+  constructor() {
+    if (MockDatabase.instance) {
+      return MockDatabase.instance;
+    }
+
+    // Initialize your database properties here
+    this.data = db;
+
+    MockDatabase.instance = this;
+  }
+
+  /**
+   * Get entities
+   */
+  public getData(key: TDataKeys): TData[TDataKeys] {
+    return this.data[key];
+  }
+
+  /**
+   * Update data
+   */
+  public updateData(key: TDataKeys, value: TDataValue): void {
+    this.data[key] = value;
+  }
+}
+
+const databaseInstance = new MockDatabase();
+
+export default databaseInstance;

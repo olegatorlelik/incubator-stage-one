@@ -2,7 +2,7 @@
 // @ts-ignore
 import supertest from 'supertest';
 import { Response } from 'superagent';
-import { HTTP_STATUSES } from '../../src/constants';
+import { HTTP_STATUSES, RouterPaths } from '../../src/constants';
 
 export interface IResponse<TBody> extends Omit<Response, 'body'> {
   body: TBody;
@@ -43,7 +43,7 @@ class TestManager<TEntity extends object> {
    * Clear data
    */
   public clearData = async () => {
-    return this.request.delete(`${this.defaultRouter}/testing/all-data`);
+    return this.request.delete(`${RouterPaths.testing}/all-data`);
   };
 
   /**
@@ -96,7 +96,11 @@ class TestManager<TEntity extends object> {
       .put(`${this.defaultRouter}/${this.entity[searchKey]}`)
       .send(body);
 
-    if (response.statusCode === HTTP_STATUSES.OK_200) {
+    if (
+      [HTTP_STATUSES.OK_200, HTTP_STATUSES.NO_CONTENT_204].includes(
+        response.statusCode
+      )
+    ) {
       this.setEntity(response.body);
     }
 

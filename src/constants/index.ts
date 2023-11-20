@@ -21,6 +21,7 @@ export enum AVAILABLE_RESOLUTIONS {
 
 export const RouterPaths = {
   videos: '/videos',
+  testing: '/testing',
 };
 
 export const ERROR_MESSAGES = {
