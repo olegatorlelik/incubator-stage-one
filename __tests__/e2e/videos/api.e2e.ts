@@ -38,6 +38,8 @@ describe(RouterPaths.videos, () => {
     await videoTestManager.createVideo({
       statusCode: HTTP_STATUSES.CREATED_201,
     });
+
+    await videoTestManager.getVideoById();
   });
 
   it('Should return video by id', async () => {
@@ -45,13 +47,14 @@ describe(RouterPaths.videos, () => {
   });
 
   it("Shouldn't update entity id", async () => {
-    // Check existence entity
     await videoTestManager.updateVideo({
       statusCode: HTTP_STATUSES.BAD_REQUEST_400,
     });
   });
 
   it('Update entity by some key', async () => {
-    await videoTestManager.updateVideo({ statusCode: HTTP_STATUSES.OK_200 });
+    await videoTestManager.updateVideo({
+      statusCode: HTTP_STATUSES.NO_CONTENT_204,
+    });
   });
 });

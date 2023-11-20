@@ -6,5 +6,5 @@ export interface IVideoUpdate {
   availableResolutions: AVAILABLE_RESOLUTIONS[];
   canBeDownloaded: boolean;
   minAgeRestriction: number | null;
-  publicationDate: Date;
+  publicationDate: string;
 }

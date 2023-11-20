@@ -4,6 +4,7 @@ import { string } from '../schemas/string';
 import { array } from '../schemas/array';
 import { IVideoUpdate } from '../../../features/videos/models/update';
 import { AVAILABLE_RESOLUTIONS } from '../../../constants';
+import date from '../schemas/date';
 
 /**
  * Validation input params for video entity
@@ -75,9 +76,9 @@ const updateVideoValidation = (videoParams: IVideoUpdate): IErrorField[] => {
 
         case 'publicationDate':
           return (
-            !(new Date(videoParams[key]) instanceof Date) && {
+            !(typeof value === 'string' && date(value)) && {
               field: 'publicationDate',
-              message: 'Should be date',
+              message: 'Should be date on format ISO',
             }
           );
 

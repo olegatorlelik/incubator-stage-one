@@ -103,7 +103,7 @@ router.put(
 
     videoRepository.updateVideo(updatedVideo);
 
-    res.status(HTTP_STATUSES.OK_200).send(updatedVideo);
+    res.status(HTTP_STATUSES.NO_CONTENT_204).send();
   }
 );
 
@@ -126,17 +126,6 @@ router.delete('/:id', (req: TTypedRequestParams<TVideoUriParams>, res) => {
   videoRepository.removeVideoById(video.id.toString());
 
   res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
-});
-
-/**
- * Clear all videos from db
- */
-router.delete('/testing/all-data', (req, res) => {
-  videoRepository.clearVideoStore();
-
-  res
-    .status(HTTP_STATUSES.NO_CONTENT_204)
-    .send({ message: 'Data was cleared successfully' });
 });
 
 export default router;

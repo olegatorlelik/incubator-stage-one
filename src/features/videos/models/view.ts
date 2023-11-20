@@ -5,8 +5,8 @@ export interface IVideoView {
   title: string;
   author: string;
   minAgeRestriction: number | null;
-  createdAt: Date;
-  publicationDate: Date;
+  createdAt: string;
+  publicationDate: string;
   availableResolutions: AVAILABLE_RESOLUTIONS[];
   canBeDownloaded: boolean;
 }

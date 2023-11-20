@@ -1,6 +1,7 @@
 import express from 'express';
 import globalErrorHandler from './common/middlewares/global-error-handler';
 import videoRoutes from './features/videos/routes';
+import testingRoutes from './features/testing/routes';
 import { RouterPaths } from './constants';
 
 const app = express();
@@ -13,6 +14,7 @@ app.get('/', (req, res) => {
 });
 
 app.use(RouterPaths.videos, videoRoutes);
+app.use(RouterPaths.testing, testingRoutes);
 app.use(globalErrorHandler);
 
 export default app;
