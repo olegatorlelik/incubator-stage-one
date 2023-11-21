@@ -15,7 +15,6 @@ class VideoRepository {
    */
   public getVideoById = (id: string): IVideoView | void => {
     const videos = db.getData('videos');
-
     const video = videos.find(({ id: vId }) => Number(id) === vId);
 
     if (!video) {
