@@ -116,16 +116,14 @@ router.delete('/:id', (req: TTypedRequestParams<TVideoUriParams>, res) => {
   const video = videoRepository.getVideoById(params?.id);
 
   if (!video) {
-    new CustomError('Delete error', {
-      statusCode: HTTP_STATUSES.NO_CONTENT_204,
-    });
+    res.status(HTTP_STATUSES.NOT_FOUND_404).send();
 
     return;
   }
 
   videoRepository.removeVideoById(video.id.toString());
 
-  res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
+  res.status(HTTP_STATUSES.NO_CONTENT_204).send();
 });
 
 export default router;
