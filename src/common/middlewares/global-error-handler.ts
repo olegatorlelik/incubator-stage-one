@@ -15,7 +15,7 @@ const globalErrorHandler = (
   if (error instanceof CustomError) {
     res
       .status(error.statusCode ?? HTTP_STATUSES.NOT_FOUND_404)
-      .send({ errorsMessages: error.getSerializedErrors });
+      .send({ errorsMessages: error?.getSerializedErrors });
 
     return;
   }
