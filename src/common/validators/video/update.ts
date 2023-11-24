@@ -3,8 +3,9 @@ import { IErrorField } from '../../../interfaces';
 import { string } from '../schemas/string';
 import { array } from '../schemas/array';
 import { IVideoUpdate } from '../../../features/videos/models/update';
-import { AVAILABLE_RESOLUTIONS } from '../../../constants';
+import { AVAILABLE_RESOLUTIONS, errorFieldMessage } from '../../../constants';
 import date from '../schemas/date';
+import number from '../schemas/number';
 
 /**
  * Validation input params for video entity
@@ -34,7 +35,7 @@ const updateVideoValidation = (videoParams: IVideoUpdate): IErrorField[] => {
           return (
             !(typeof value === 'string' && string(value)) && {
               field: 'title',
-              message: 'Invalid field',
+              message: errorFieldMessage,
             }
           );
         }
@@ -43,7 +44,7 @@ const updateVideoValidation = (videoParams: IVideoUpdate): IErrorField[] => {
           return (
             !(typeof value === 'string' && string(value)) && {
               field: 'author',
-              message: 'Invalid field',
+              message: errorFieldMessage,
             }
           );
         }
@@ -53,24 +54,24 @@ const updateVideoValidation = (videoParams: IVideoUpdate): IErrorField[] => {
             !(
               Array.isArray(value) &&
               array(value, Object.values(AVAILABLE_RESOLUTIONS))
-            ) && { field: 'availableResolutions', message: 'Invalid values' }
+            ) && { field: 'availableResolutions', message: errorFieldMessage }
           );
         }
 
         case 'canBeDownloaded': {
           return (
-            typeof videoParams[key] !== 'boolean' && {
+            typeof value !== 'boolean' && {
               field: 'canBeDownloaded',
-              message: 'Should be boolean',
+              message: errorFieldMessage,
             }
           );
         }
 
         case 'minAgeRestriction':
           return (
-            typeof videoParams[key] !== 'number' && {
+            !(typeof value === 'number' && number(value)) && {
               field: 'minAgeRestriction',
-              message: 'Should be number',
+              message: errorFieldMessage,
             }
           );
 
@@ -78,12 +79,12 @@ const updateVideoValidation = (videoParams: IVideoUpdate): IErrorField[] => {
           return (
             !(typeof value === 'string' && date(value)) && {
               field: 'publicationDate',
-              message: 'Should be date on format ISO',
+              message: errorFieldMessage,
             }
           );
 
         default:
-          return { field: key, message: 'Field not exists' };
+          return { field: key, message: errorFieldMessage };
       }
     })
     .filter(Boolean) as IErrorField[];

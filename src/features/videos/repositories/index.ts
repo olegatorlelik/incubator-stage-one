@@ -56,14 +56,17 @@ class VideoRepository {
     const videos = db.getData('videos');
 
     const id = videos.length + 1;
+    const date = new Date();
 
     db.updateData('videos', [
       ...videos,
       {
         id,
         ...video,
-        createdAt: new Date().toISOString(),
-        publicationDate: new Date().toISOString(),
+        createdAt: date.toISOString(),
+        publicationDate: new Date(
+          date.setDate(date.getDate() + 1)
+        ).toISOString(),
         minAgeRestriction: null,
         canBeDownloaded: false,
       },
