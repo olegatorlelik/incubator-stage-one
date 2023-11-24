@@ -24,8 +24,4 @@ export const RouterPaths = {
   testing: '/testing',
 };
 
-export const ERROR_MESSAGES = {
-  typeofString: 'Type of value should be string',
-  typeofBoolean: '',
-  allRequiredFields: 'All required fields should be filled',
-};
+export const errorFieldMessage = 'The value is filled incorrectly';
