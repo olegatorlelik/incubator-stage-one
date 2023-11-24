@@ -3,7 +3,7 @@ import { IErrorField } from '../../../interfaces';
 import { string } from '../schemas/string';
 import { IVideoCreate } from '../../../features/videos/models/create';
 import { array } from '../schemas/array';
-import { AVAILABLE_RESOLUTIONS } from '../../../constants';
+import { AVAILABLE_RESOLUTIONS, errorFieldMessage } from '../../../constants';
 
 const createVideoValidation = (videoParams: IVideoCreate): IErrorField[] => {
   const requiredFields: (keyof IVideoCreate)[] = [
@@ -27,7 +27,7 @@ const createVideoValidation = (videoParams: IVideoCreate): IErrorField[] => {
           return (
             !(typeof value === 'string' && string(value)) && {
               field: 'title',
-              message: 'Invalid field',
+              message: errorFieldMessage,
             }
           );
         }
@@ -36,7 +36,7 @@ const createVideoValidation = (videoParams: IVideoCreate): IErrorField[] => {
           return (
             !(typeof value === 'string' && string(value)) && {
               field: 'author',
-              message: 'Invalid field',
+              message: errorFieldMessage,
             }
           );
         }
@@ -46,7 +46,7 @@ const createVideoValidation = (videoParams: IVideoCreate): IErrorField[] => {
             !(
               Array.isArray(value) &&
               array(value, Object.values(AVAILABLE_RESOLUTIONS))
-            ) && { field: 'availableResolutions', message: 'Invalid values' }
+            ) && { field: 'availableResolutions', message: errorFieldMessage }
           );
         }
 
