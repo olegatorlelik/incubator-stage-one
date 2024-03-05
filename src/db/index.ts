@@ -33,6 +33,26 @@ const db = {
       availableResolutions: [AVAILABLE_RESOLUTIONS.P144],
     },
   ],
+  blogs: [
+    {
+      id: 'item1',
+      name: 'First Item',
+      description: 'This is the description of the first item.',
+      websiteUrl: 'https://www.example.com/item1',
+    },
+    {
+      id: 'item2',
+      name: 'Second Item',
+      description: 'Description for the second item goes here.',
+      websiteUrl: 'https://www.example.com/item2',
+    },
+    {
+      id: 'item3',
+      name: 'Third Item',
+      description: 'Detailed description of the third item.',
+      websiteUrl: 'https://www.example.com/item3',
+    },
+  ],
 };
 
 type TData = typeof db;
@@ -67,7 +87,7 @@ class MockDatabase {
   /**
    * Get entities
    */
-  public getData(key: TDataKeys): TData[TDataKeys] {
+  public getData<TKey extends TDataKeys>(key: TKey): TData[TKey] {
     return this.data[key];
   }
 

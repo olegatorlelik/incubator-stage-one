@@ -4,7 +4,10 @@ class TestingRepositories {
   /**
    * Clear data
    */
-  public clearData = (): void => db.updateData('videos', []);
+  public clearData = (): void => {
+    db.updateData('videos', []);
+    db.updateData('blogs', []);
+  };
 }
 
 export default TestingRepositories;

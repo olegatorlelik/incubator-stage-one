@@ -3,6 +3,7 @@
 import supertest from 'supertest';
 import { Response } from 'superagent';
 import { HTTP_STATUSES, RouterPaths } from '../../src/constants';
+import { TKey } from '../../src/types';
 
 export interface IResponse<TBody> extends Omit<Response, 'body'> {
   body: TBody;
@@ -105,6 +106,20 @@ class TestManager<TEntity extends object> {
     }
 
     return response;
+  };
+
+  /**
+   * Match to blog
+   */
+  protected compareEntity = async (
+    entity: TEntity,
+    key: TKey<TEntity>
+  ): Promise<void> => {
+    const { statusCode, body } = await this.getSingleEntity(key);
+
+    expect(statusCode).toBe(HTTP_STATUSES.OK_200);
+
+    expect(entity).toStrictEqual(body);
   };
 
   /**

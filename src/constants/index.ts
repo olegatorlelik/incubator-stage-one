@@ -22,6 +22,7 @@ export enum AVAILABLE_RESOLUTIONS {
 export const RouterPaths = {
   videos: '/videos',
   testing: '/testing',
+  blogs: '/blogs',
 };
 
 export const errorFieldMessage = 'The value is filled incorrectly';
