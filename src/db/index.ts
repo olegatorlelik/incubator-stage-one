@@ -53,6 +53,48 @@ const db = {
       websiteUrl: 'https://www.example.com/item3',
     },
   ],
+  posts: [
+    {
+      id: '1',
+      title: 'First Blog Post',
+      shortDescription: 'A brief introduction',
+      content: 'This is the content of the first blog post.',
+      blogId: 'item1',
+      blogName: 'Tech Blog',
+    },
+    {
+      id: '2',
+      title: 'Second Blog Post',
+      shortDescription: 'Another short description',
+      content: 'This is the content of the second blog post.',
+      blogId: 'item1',
+      blogName: 'Science Blog',
+    },
+    {
+      id: '3',
+      title: 'Third Blog Post',
+      shortDescription: 'Yet another description',
+      content: 'This is the content of the third blog post.',
+      blogId: 'item2',
+      blogName: 'Travel Blog',
+    },
+    {
+      id: '4',
+      title: 'Fourth Blog Post',
+      shortDescription: 'Short description here',
+      content: 'This is the content of the fourth blog post.',
+      blogId: 'item2',
+      blogName: 'Food Blog',
+    },
+    {
+      id: '5',
+      title: 'Fifth Blog Post',
+      shortDescription: 'Brief description for the fifth post',
+      content: 'This is the content of the fifth blog post.',
+      blogId: 'item3',
+      blogName: 'Fashion Blog',
+    },
+  ],
 };
 
 type TData = typeof db;
@@ -80,7 +122,6 @@ class MockDatabase {
 
     // Initialize your database properties here
     this.data = db;
-
     MockDatabase.instance = this;
   }
 

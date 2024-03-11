@@ -2,6 +2,7 @@ import express from 'express';
 import globalErrorHandler from './common/middlewares/global-error-handler';
 import videoRoutes from './features/videos/routes';
 import blogsRouter from './features/blogs/routes';
+import postsRouter from './features/posts/routes';
 import testingRoutes from './features/testing/routes';
 import { RouterPaths } from './constants';
 import inputValidationMiddleware from './common/middlewares/input-validation-middleware';
@@ -24,6 +25,7 @@ app.use(
   inputValidationMiddleware,
   blogsRouter
 );
+app.use(RouterPaths.posts, postsRouter);
 app.use(RouterPaths.testing, testingRoutes);
 app.use(globalErrorHandler);
 
