@@ -60,7 +60,7 @@ const db = {
       shortDescription: 'A brief introduction',
       content: 'This is the content of the first blog post.',
       blogId: 'item1',
-      blogName: 'Tech Blog',
+      blogName: 'First Item',
     },
     {
       id: '2',
@@ -68,7 +68,7 @@ const db = {
       shortDescription: 'Another short description',
       content: 'This is the content of the second blog post.',
       blogId: 'item1',
-      blogName: 'Science Blog',
+      blogName: 'First Item',
     },
     {
       id: '3',
@@ -76,7 +76,7 @@ const db = {
       shortDescription: 'Yet another description',
       content: 'This is the content of the third blog post.',
       blogId: 'item2',
-      blogName: 'Travel Blog',
+      blogName: 'Second Item',
     },
     {
       id: '4',
@@ -84,7 +84,7 @@ const db = {
       shortDescription: 'Short description here',
       content: 'This is the content of the fourth blog post.',
       blogId: 'item2',
-      blogName: 'Food Blog',
+      blogName: 'Second Item',
     },
     {
       id: '5',
@@ -92,7 +92,7 @@ const db = {
       shortDescription: 'Brief description for the fifth post',
       content: 'This is the content of the fifth blog post.',
       blogId: 'item3',
-      blogName: 'Fashion Blog',
+      blogName: 'Third Item',
     },
   ],
 };

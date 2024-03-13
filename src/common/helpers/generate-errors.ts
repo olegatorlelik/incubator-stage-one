@@ -4,16 +4,25 @@ import { ValidationError } from 'express-validator/src/base';
 /**
  * Generate error array for custom error middleware
  */
-const generateErrors = (inputErrors: ValidationError[]): IErrorField[] =>
-  inputErrors.map(({ msg, ...value }) => {
-    if (!('path' in value)) {
-      return;
+const generateErrors = (inputErrors: ValidationError[]): IErrorField[] => {
+  return inputErrors.map(({ msg, ...value }) => {
+    if ('path' in value) {
+      return {
+        message: msg,
+        field: value.path,
+      };
     }
 
-    return {
-      message: msg,
-      field: value.path,
-    };
-  }) as IErrorField[];
+    if ('fields' in value) {
+      const [field] = value.fields;
 
+      return {
+        message: `Unknown field ${field?.path} in ${field?.location} with value ${field?.value}`,
+        field: field.value,
+      };
+    }
+
+    return [];
+  }) as IErrorField[];
+};
 export default generateErrors;

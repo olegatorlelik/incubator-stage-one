@@ -16,6 +16,10 @@ export interface ITestManagerParams {
   request: TRequest;
 }
 
+export interface IOptions {
+  statusCode: HTTP_STATUSES;
+}
+
 class TestManager<TEntity extends object> {
   /**
    * Entity
@@ -118,7 +122,6 @@ class TestManager<TEntity extends object> {
     const { statusCode, body } = await this.getSingleEntity(key);
 
     expect(statusCode).toBe(HTTP_STATUSES.OK_200);
-
     expect(entity).toStrictEqual(body);
   };
 

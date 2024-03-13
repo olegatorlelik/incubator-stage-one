@@ -8,6 +8,7 @@ import { RouterPaths } from './constants';
 import inputValidationMiddleware from './common/middlewares/input-validation-middleware';
 import handleCheckSchema from './common/middlewares/handle-check-schema';
 import blogSchemas from './common/validators/blogs';
+import postSchemas from './common/validators/post';
 
 const app = express();
 
@@ -25,7 +26,12 @@ app.use(
   inputValidationMiddleware,
   blogsRouter
 );
-app.use(RouterPaths.posts, postsRouter);
+app.use(
+  RouterPaths.posts,
+  handleCheckSchema(postSchemas),
+  inputValidationMiddleware,
+  postsRouter
+);
 app.use(RouterPaths.testing, testingRoutes);
 app.use(globalErrorHandler);
 

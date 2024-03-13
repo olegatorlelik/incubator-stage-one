@@ -7,6 +7,7 @@ class TestingRepositories {
   public clearData = (): void => {
     db.updateData('videos', []);
     db.updateData('blogs', []);
+    db.updateData('posts', []);
   };
 }
 

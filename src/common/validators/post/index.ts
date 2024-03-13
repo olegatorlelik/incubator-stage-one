@@ -1,8 +1,8 @@
 import input from './input';
 
-const blogSchemas = {
+const postSchemas = {
   POST: input,
   PUT: input,
 };
 
-export default blogSchemas;
+export default postSchemas;

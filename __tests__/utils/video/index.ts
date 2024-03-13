@@ -1,11 +1,11 @@
-import TestManager, { IResponse, ITestManagerParams } from '../test-manager';
+import TestManager, {
+  IOptions,
+  IResponse,
+  ITestManagerParams,
+} from '../test-manager';
 import { IVideoView } from '../../../src/features/videos/models/view';
 import { AVAILABLE_RESOLUTIONS, HTTP_STATUSES } from '../../../src/constants';
 import { IVideoUpdate } from '../../../src/features/videos/models/update';
-
-interface IOptions {
-  statusCode: HTTP_STATUSES;
-}
 
 class VideoTestManager extends TestManager<IVideoView> {
   /**

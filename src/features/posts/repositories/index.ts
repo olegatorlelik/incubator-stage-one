@@ -1,6 +1,8 @@
 import db from '../../../db';
 import { IPostView } from '../models/view';
 import { IPostParamsInput } from '../models/input';
+import { IBlogView } from '../../blogs/models/view';
+import _ from 'lodash';
 
 class PostRepository {
   /**
@@ -8,6 +10,13 @@ class PostRepository {
    */
   public get posts(): IPostView[] {
     return db.getData('posts');
+  }
+
+  /**
+   * Get blogs ( need to find blogName and create relation )
+   */
+  public get blogs(): IBlogView[] {
+    return db.getData('blogs');
   }
 
   /**
@@ -35,15 +44,22 @@ class PostRepository {
   /**
    * Adding new post
    */
-  public addPost = (post: IPostParamsInput): IPostView => {
-    const newBlog = {
+  public addPost = (post: IPostParamsInput): IPostView | void => {
+    const { name } = _.find(this.blogs, { id: post.blogId }) ?? {};
+
+    if (!name) {
+      return;
+    }
+
+    const newPost = {
       id: String(this.posts.length + 1),
+      blogName: name,
       ...post,
     };
 
-    db.updateData('posts', [...this.posts, newBlog]);
+    db.updateData('posts', [...this.posts, newPost]);
 
-    return newBlog;
+    return newPost;
   };
 
   /**

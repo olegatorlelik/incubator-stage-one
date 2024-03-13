@@ -1,4 +1,4 @@
-import { checkSchema } from 'express-validator';
+import { checkExact, checkSchema } from 'express-validator';
 import { Request, Response, NextFunction } from 'express';
 import { TValidateSchema } from '../../interfaces/i-validate-schema';
 
@@ -13,7 +13,7 @@ const handleCheckSchema =
       return;
     }
 
-    await checkSchema(schema).run(req);
+    await checkExact(checkSchema(schema)).run(req);
 
     next();
   };

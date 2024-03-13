@@ -1,11 +1,13 @@
-import TestManager, { IResponse, ITestManagerParams } from '../test-manager';
+import TestManager, {
+  IOptions,
+  IResponse,
+  ITestManagerParams,
+} from '../test-manager';
 import { HTTP_STATUSES } from '../../../src/constants';
 import { IBlogInputParams } from '../../../src/features/blogs/models/input';
 import { IBlogView } from '../../../src/features/blogs/models/view';
 
-interface IOptions {
-  statusCode: HTTP_STATUSES;
-}
+const updateTestTitleWebsiteUrl = 'https://www.example.com/path/to/page/update';
 
 class BlogTestManager extends TestManager<IBlogView> {
   /**
@@ -17,7 +19,7 @@ class BlogTestManager extends TestManager<IBlogView> {
     this.entity = {
       id: '1',
       name: 'Test name',
-      websiteUrl: 'www.testBlog.com',
+      websiteUrl: 'https://www.example.com/path/to/page',
       description: 'test description',
     };
   }
@@ -55,7 +57,7 @@ class BlogTestManager extends TestManager<IBlogView> {
     const createResponse = await this.createEntity({
       name: 'new t',
       description: 'new test description',
-      websiteUrl: 'www.newTestWebsiteUrl.com',
+      websiteUrl: updateTestTitleWebsiteUrl,
     });
 
     await this.compareEntity(createResponse.body, 'id');
@@ -97,7 +99,7 @@ class BlogTestManager extends TestManager<IBlogView> {
         {
           name: 'name t',
           description: 'description test update',
-          websiteUrl: 'websiteUrl test update',
+          websiteUrl: updateTestTitleWebsiteUrl,
         },
         'id'
       );
