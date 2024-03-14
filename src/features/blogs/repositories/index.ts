@@ -1,6 +1,8 @@
 import { IBlogView } from '../models/view';
 import db from '../../../db';
 import { IBlogInputParams } from '../models/input';
+import _ from 'lodash';
+import { IPostView } from '../../posts/models/view';
 
 class BlogsRepository {
   /**
@@ -8,6 +10,13 @@ class BlogsRepository {
    */
   public get blogs(): IBlogView[] {
     return db.getData('blogs');
+  }
+
+  /**
+   * Get post ( needed in case when blog name was changed )
+   */
+  public get posts(): IPostView[] {
+    return db.getData('posts');
   }
 
   /**
@@ -50,10 +59,28 @@ class BlogsRepository {
    * Update blog
    */
   public updateBlog = (blog: IBlogView) => {
+    const { name } = _.find(this.blogs, { id: blog.id }) ?? {};
+    const { name: updateBlogName } = blog ?? {};
+
+    // Check if name of blog was changed we have to update posts
+    if (name && name !== updateBlogName) {
+      db.updateData(
+        'posts',
+        this.posts.map((post) =>
+          post.blogId === blog.id
+            ? {
+                ...post,
+                blogName: updateBlogName,
+              }
+            : post
+        )
+      );
+    }
+
     db.updateData(
       'blogs',
       this.blogs.map((item) =>
-        blog.id === item.id ? { ...blog, ...item } : item
+        blog.id === item.id ? { ...item, ...blog } : item
       )
     );
   };

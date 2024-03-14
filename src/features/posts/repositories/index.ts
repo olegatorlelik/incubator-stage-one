@@ -69,7 +69,7 @@ class PostRepository {
     db.updateData(
       'posts',
       this.posts.map((item) =>
-        post.id === item.id ? { ...post, ...item } : item
+        post.id === item.id ? { ...item, ...post } : item
       )
     );
   };
