@@ -3,7 +3,10 @@ import auth from 'basic-auth';
 import { HTTP_STATUSES } from '../../constants';
 
 const basicAuth = (req: Request, res: Response, next: NextFunction) => {
-  if (req.method === 'GET') {
+  if (
+    req.method === 'GET' ||
+    (req.url.includes('testing') && req.method === 'DELETE')
+  ) {
     next();
 
     return;
