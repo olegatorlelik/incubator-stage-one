@@ -1,11 +1,11 @@
-import TestManager, { IResponse, ITestManagerParams } from '../test-manager';
+import TestManager, {
+  IOptions,
+  IResponse,
+  ITestManagerParams,
+} from '../test-manager';
 import { IVideoView } from '../../../src/features/videos/models/view';
 import { AVAILABLE_RESOLUTIONS, HTTP_STATUSES } from '../../../src/constants';
 import { IVideoUpdate } from '../../../src/features/videos/models/update';
-
-interface IOptions {
-  statusCode: HTTP_STATUSES;
-}
 
 class VideoTestManager extends TestManager<IVideoView> {
   /**
@@ -60,7 +60,7 @@ class VideoTestManager extends TestManager<IVideoView> {
       availableResolutions: [AVAILABLE_RESOLUTIONS.P240],
     });
 
-    await this.compareVideos(createResponse.body);
+    await this.compareEntity(createResponse.body, 'id');
 
     return createResponse;
   };
@@ -108,17 +108,6 @@ class VideoTestManager extends TestManager<IVideoView> {
       );
 
     expect(updateStatusCode).toBe(HTTP_STATUSES.NO_CONTENT_204);
-  };
-
-  /**
-   * Match to video
-   */
-  public compareVideos = async (video: IVideoView): Promise<void> => {
-    const { statusCode, body } = await this.getSingleEntity('id');
-
-    expect(statusCode).toBe(HTTP_STATUSES.OK_200);
-
-    expect(video).toStrictEqual(body);
   };
 }
 
