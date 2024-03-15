@@ -9,10 +9,12 @@ import inputValidationMiddleware from './common/middlewares/input-validation-mid
 import handleCheckSchema from './common/middlewares/handle-check-schema';
 import blogSchemas from './common/validators/blogs';
 import postSchemas from './common/validators/post';
+import basicAuth from './common/middlewares/basic-auth';
 
 const app = express();
 
 app.use(express.json());
+app.use(basicAuth);
 
 app.get('/', (req, res) => {
   res.write('hello world');
