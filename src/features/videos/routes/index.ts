@@ -1,7 +1,6 @@
 import { Request, Response, Router } from 'express';
 import { IVideoView } from '../models/view';
 import { HTTP_STATUSES } from '../../../constants';
-import { TTypedRequest, TTypedRequestParams } from '../../../types';
 import { TVideoUriParams } from '../models/uri-params';
 import { IVideoCreate } from '../models/create';
 import { IVideoUpdate } from '../models/update';
@@ -25,10 +24,7 @@ router.get('/', (req: Request, res: Response<IVideoView[]>) =>
  */
 router.get(
   '/:id',
-  (
-    req: TTypedRequestParams<TVideoUriParams>,
-    res: Response<IVideoView | number>
-  ) => {
+  (req: Request<TVideoUriParams>, res: Response<IVideoView | number>) => {
     const { params } = req;
 
     const video = videoRepository.getVideoById(params?.id);
@@ -48,10 +44,7 @@ router.get(
  */
 router.post(
   '/',
-  (
-    req: TTypedRequest<never, IVideoCreate, never>,
-    res: Response<IVideoView>
-  ) => {
+  (req: Request<never, IVideoCreate, never>, res: Response<IVideoView>) => {
     const errors = createVideoValidation(req.body);
 
     if (errors?.length !== 0) {
@@ -77,8 +70,8 @@ router.post(
 router.put(
   '/:id',
   (
-    req: TTypedRequest<never, IVideoUpdate, TVideoUriParams>,
-    res: Response<IVideoView | number>
+    req: Request<TVideoUriParams, unknown, IVideoUpdate>,
+    res: Response<IVideoView>
   ) => {
     const { params, body } = req;
 
@@ -110,7 +103,7 @@ router.put(
 /**
  * Delete video by id
  */
-router.delete('/:id', (req: TTypedRequestParams<TVideoUriParams>, res) => {
+router.delete('/:id', (req: Request<TVideoUriParams>, res) => {
   const { params } = req;
 
   const video = videoRepository.getVideoById(params?.id);
