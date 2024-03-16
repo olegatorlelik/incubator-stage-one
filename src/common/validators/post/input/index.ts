@@ -11,13 +11,19 @@ const checkExistingBlog = (value: IBlogView['id']) =>
 
 const input: TValidateSchema<Omit<IPostParamsInput, 'blogName'>> = {
   title: {
+    trim: true,
     isLength: { options: { min: 1, max: 30 } },
   },
-  shortDescription: { isLength: { options: { min: 1, max: 100 } } },
+  shortDescription: {
+    trim: true,
+    isLength: { options: { min: 1, max: 100 } },
+  },
   content: {
+    trim: true,
     isLength: { options: { min: 1, max: 1000 } },
   },
   blogId: {
+    trim: true,
     custom: { options: checkExistingBlog },
   },
 };
