@@ -17,7 +17,7 @@ const inputValidationMiddleware = (
     return;
   }
 
-  const errors = generateErrors(result.array());
+  const errors = generateErrors(result.array({ onlyFirstError: true }));
 
   throw new CustomError('error', {
     statusCode: HTTP_STATUSES.BAD_REQUEST_400,

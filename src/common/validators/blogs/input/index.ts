@@ -3,10 +3,15 @@ import { IBlogInputParams } from '../../../../features/blogs/models/input';
 
 const input: TValidateSchema<IBlogInputParams> = {
   name: {
+    trim: true,
     isLength: { options: { min: 1, max: 15 } },
   },
-  description: { isLength: { options: { min: 1, max: 500 } } },
+  description: {
+    trim: true,
+    isLength: { options: { min: 1, max: 500 } },
+  },
   websiteUrl: {
+    trim: true,
     isLength: { options: { min: 1, max: 100 } },
     matches: {
       options:
