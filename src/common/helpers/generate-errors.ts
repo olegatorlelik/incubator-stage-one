@@ -18,7 +18,7 @@ const generateErrors = (inputErrors: ValidationError[]): IErrorField[] => {
 
       return {
         message: `Unknown field ${field?.path} in ${field?.location} with value ${field?.value}`,
-        field: field.value,
+        field: field.path,
       };
     }
 
