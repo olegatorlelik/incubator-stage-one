@@ -7,6 +7,7 @@ import supertest from 'supertest';
 // @ts-ignore
 import request from 'supertest';
 import PostTestManager from '../../utils/post';
+import { connect, disconnect } from '../../utils/mongo-db-memory-helper';
 
 describe(RouterPaths.posts, () => {
   const req: supertest.SuperTest<supertest.Test> = request(app);
@@ -16,7 +17,12 @@ describe(RouterPaths.posts, () => {
     defaultRouter: RouterPaths.posts,
   });
 
+  /**
+   * Connect and clear database before start test
+   */
   beforeAll(async () => {
+    await connect();
+
     const res = await postTestManager.clearData();
 
     expect(res.statusCode).toBe(HTTP_STATUSES.NO_CONTENT_204);
@@ -56,5 +62,10 @@ describe(RouterPaths.posts, () => {
     await postTestManager.updatePost({
       statusCode: HTTP_STATUSES.NO_CONTENT_204,
     });
+  });
+
+  afterAll(async () => {
+    await postTestManager.clearData();
+    await disconnect();
   });
 });

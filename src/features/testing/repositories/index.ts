@@ -1,13 +1,12 @@
-import db from '../../../db';
+import postModel from '../../posts/models';
+import blogsModel from '../../blogs/models';
 
 class TestingRepositories {
   /**
    * Clear data
    */
-  public clearData = (): void => {
-    db.updateData('videos', []);
-    db.updateData('blogs', []);
-    db.updateData('posts', []);
+  public clearData = async (): Promise<void> => {
+    await Promise.all([postModel.deleteMany(), blogsModel.deleteMany()]);
   };
 }
 

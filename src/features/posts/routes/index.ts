@@ -2,8 +2,8 @@ import { Request, Response, Router } from 'express';
 import { HTTP_STATUSES } from '../../../constants';
 import { TUriParams } from '../../../interfaces/i-uri-params';
 import PostRepository from '../repositories';
-import { IPostView } from '../models/view';
-import { IPostParamsInput } from '../models/input';
+import { IPostView } from '../../../interfaces/entities/post/view';
+import { IPostInputParams } from '../../../interfaces/entities/post/input';
 
 const router = Router();
 const postRepository = new PostRepository();
@@ -11,8 +11,10 @@ const postRepository = new PostRepository();
 /**
  * Get all posts
  */
-router.get('/', (_, res: Response<IPostView[]>) => {
-  res.status(HTTP_STATUSES.OK_200).send(postRepository.posts);
+router.get('/', async (_, res: Response<IPostView[]>) => {
+  const posts = await postRepository.posts();
+
+  res.status(HTTP_STATUSES.OK_200).send(posts);
 });
 
 /**
@@ -20,10 +22,9 @@ router.get('/', (_, res: Response<IPostView[]>) => {
  */
 router.get(
   '/:id',
-  (req: Request<TUriParams>, res: Response<IPostView | number>) => {
+  async (req: Request<TUriParams>, res: Response<IPostView | number>) => {
     const { params } = req;
-
-    const post = postRepository.getPostById(params?.id);
+    const post = await postRepository.getPostById(params?.id);
 
     if (!post) {
       res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
@@ -40,8 +41,11 @@ router.get(
  */
 router.post(
   '/',
-  (req: Request<never, IPostParamsInput>, res: Response<IPostView>) => {
-    const post = postRepository.addPost(req.body);
+  async (
+    req: Request<never, never, IPostInputParams>,
+    res: Response<IPostView>
+  ) => {
+    const post = await postRepository.addPost(req.body);
 
     if (!post) {
       res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
@@ -58,18 +62,18 @@ router.post(
  */
 router.put(
   '/:id',
-  (req: Request<TUriParams, IPostParamsInput>, res: Response<IPostView>) => {
+  async (
+    req: Request<TUriParams, never, IPostInputParams>,
+    res: Response<IPostView>
+  ) => {
     const { params, body } = req;
+    const isSuccess = await postRepository.updatePost(body, params?.id);
 
-    const post = postRepository.getPostById(params?.id);
-
-    if (!post) {
-      res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
+    if (!isSuccess) {
+      res.status(HTTP_STATUSES.BAD_REQUEST_400).send();
 
       return;
     }
-
-    postRepository.updatePost({ ...post, ...body });
 
     res.status(HTTP_STATUSES.NO_CONTENT_204).send();
   }
@@ -78,18 +82,15 @@ router.put(
 /**
  * Delete post by id
  */
-router.delete('/:id', (req: Request<TUriParams>, res) => {
+router.delete('/:id', async (req: Request<TUriParams>, res) => {
   const { params } = req;
+  const isSuccess = await postRepository.removePost(params?.id);
 
-  const post = postRepository.getPostById(params?.id);
-
-  if (!post) {
-    res.status(HTTP_STATUSES.NOT_FOUND_404).send();
+  if (!isSuccess) {
+    res.status(HTTP_STATUSES.BAD_REQUEST_400).send();
 
     return;
   }
-
-  postRepository.removePost(post.id);
 
   res.status(HTTP_STATUSES.NO_CONTENT_204).send();
 });
