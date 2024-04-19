@@ -28,5 +28,3 @@ export const RouterPaths = {
 
 export const username = 'admin';
 export const password = 'qwerty';
-
-export const errorFieldMessage = 'The value is filled incorrectly';
