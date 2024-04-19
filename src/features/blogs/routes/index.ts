@@ -1,9 +1,9 @@
 import { Request, Response, Router } from 'express';
 import BlogsRepository from '../repositories';
 import { HTTP_STATUSES } from '../../../constants';
-import { IBlogView } from '../models/view';
+import { IBlogView } from '../../../interfaces/entities/blog/view';
 import { TUriParams } from '../../../interfaces/i-uri-params';
-import { IBlogInputParams } from '../models/input';
+import { IBlogInputParams } from '../../../interfaces/entities/blog/input';
 
 const router = Router();
 const blogsRepository = new BlogsRepository();
@@ -11,8 +11,16 @@ const blogsRepository = new BlogsRepository();
 /**
  * Get all blogs
  */
-router.get('/', (_, res: Response<IBlogView[]>) => {
-  res.status(HTTP_STATUSES.OK_200).send(blogsRepository.blogs);
+router.get('/', async (_, res: Response<IBlogView[]>) => {
+  const blogs = await blogsRepository.blogs();
+
+  if (!blogs) {
+    res.status(HTTP_STATUSES.NO_CONTENT_204).send();
+
+    return;
+  }
+
+  res.status(HTTP_STATUSES.OK_200).send(blogs);
 });
 
 /**
@@ -20,10 +28,9 @@ router.get('/', (_, res: Response<IBlogView[]>) => {
  */
 router.get(
   '/:id',
-  (req: Request<TUriParams>, res: Response<IBlogView | number>) => {
+  async (req: Request<TUriParams>, res: Response<IBlogView | number>) => {
     const { params } = req;
-
-    const blog = blogsRepository.getBlogById(params?.id);
+    const blog = await blogsRepository.getBlogById(params?.id);
 
     if (!blog) {
       res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
@@ -40,8 +47,8 @@ router.get(
  */
 router.post(
   '/',
-  (req: Request<never, IBlogInputParams>, res: Response<IBlogView>) => {
-    const blog = blogsRepository.addBlog(req.body);
+  async (req: Request<never, IBlogInputParams>, res: Response<IBlogView>) => {
+    const blog = await blogsRepository.addBlog(req.body);
 
     if (!blog) {
       res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
@@ -58,18 +65,18 @@ router.post(
  */
 router.put(
   '/:id',
-  (req: Request<TUriParams, IBlogInputParams>, res: Response<IBlogView>) => {
+  async (
+    req: Request<TUriParams, IBlogInputParams>,
+    res: Response<IBlogView>
+  ) => {
     const { params, body } = req;
+    const isSuccess = await blogsRepository.updateBlog(body, params?.id);
 
-    const blog = blogsRepository.getBlogById(params?.id);
-
-    if (!blog) {
+    if (!isSuccess) {
       res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
 
       return;
     }
-
-    blogsRepository.updateBlog({ ...blog, ...body });
 
     res.status(HTTP_STATUSES.NO_CONTENT_204).send();
   }
@@ -78,18 +85,15 @@ router.put(
 /**
  * Delete blog by id
  */
-router.delete('/:id', (req: Request<TUriParams>, res) => {
+router.delete('/:id', async (req: Request<TUriParams>, res) => {
   const { params } = req;
+  const isSuccess = await blogsRepository.removeBlog(params?.id);
 
-  const blog = blogsRepository.getBlogById(params?.id);
-
-  if (!blog) {
-    res.status(HTTP_STATUSES.NOT_FOUND_404).send();
+  if (!isSuccess) {
+    res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
 
     return;
   }
-
-  blogsRepository.removeBlog(blog.id);
 
   res.status(HTTP_STATUSES.NO_CONTENT_204).send();
 });
