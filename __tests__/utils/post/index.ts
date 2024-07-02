@@ -116,7 +116,7 @@ class PostTestManager extends TestManager<IPostView> {
     }
 
     // Here we try to get blog and set one if get was success
-    this.blogTestManager.getBlogById();
+    await this.blogTestManager.getBlogById();
 
     const { id } = this.blogTestManager.entity;
 

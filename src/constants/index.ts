@@ -28,3 +28,8 @@ export const RouterPaths = {
 
 export const username = 'admin';
 export const password = 'qwerty';
+
+export const models = {
+  blogs: 'blogs',
+  posts: 'posts',
+};

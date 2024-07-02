@@ -3,7 +3,7 @@ import TestManager, {
   IResponse,
   ITestManagerParams,
 } from '../test-manager';
-import { HTTP_STATUSES, password, username } from '../../../src/constants';
+import { HTTP_STATUSES } from '../../../src/constants';
 import { IBlogView } from '../../../src/interfaces/entities/blog/view';
 import { IBlogInputParams } from '../../../src/interfaces/entities/blog/input';
 

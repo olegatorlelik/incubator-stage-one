@@ -2,12 +2,21 @@ name: CI
 
 on:
   push:
-    branches: [prod]
+    branches: [ prod ]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Create .env file
+        run: |
+          echo "MONGO_DB_CLUSTER_PASSWORD=$MONGO_DB_CLUSTER_PASSWORD" >> .env
+        env:
+          MONGO_DB_CLUSTER_PASSWORD: ${{ secrets.MONGO_DB_CLUSTER_PASSWORD }}
+
       - uses: actions/checkout@v2
       - name: Push to server
         uses: appleboy/ssh-action@master

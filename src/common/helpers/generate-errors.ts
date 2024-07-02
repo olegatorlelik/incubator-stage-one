@@ -4,8 +4,8 @@ import { ValidationError } from 'express-validator/src/base';
 /**
  * Generate error array for custom error middleware
  */
-const generateErrors = (inputErrors: ValidationError[]): IErrorField[] => {
-  return inputErrors.map(({ msg, ...value }) => {
+const generateErrors = (inputErrors: ValidationError[]): IErrorField[] =>
+  inputErrors.map(({ msg, ...value }) => {
     if ('path' in value) {
       return {
         message: msg,
@@ -24,5 +24,5 @@ const generateErrors = (inputErrors: ValidationError[]): IErrorField[] => {
 
     return [];
   }) as IErrorField[];
-};
+
 export default generateErrors;
