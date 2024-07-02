@@ -1,15 +1,18 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import supertest from 'supertest';
+import { SuperTest, Test } from 'supertest';
 import { Response } from 'superagent';
-import { HTTP_STATUSES, RouterPaths } from '../../src/constants';
+import {
+  HTTP_STATUSES,
+  password,
+  RouterPaths,
+  username,
+} from '../../src/constants';
 import { TKey } from '../../src/types';
 
 export interface IResponse<TBody> extends Omit<Response, 'body'> {
   body: TBody;
 }
 
-type TRequest = supertest.SuperTest<supertest.Test>;
+type TRequest = SuperTest<Test>;
 
 export interface ITestManagerParams {
   defaultRouter: string;
@@ -64,7 +67,10 @@ class TestManager<TEntity extends object> {
   protected createEntity = async (
     data: Partial<TEntity>
   ): Promise<IResponse<TEntity>> => {
-    const res = await this.request.post(this.defaultRouter).send(data);
+    const res = await this.request
+      .post(this.defaultRouter)
+      .auth(username, password)
+      .send(data);
 
     if (res.statusCode === HTTP_STATUSES.CREATED_201) {
       this.setEntity(res.body);
@@ -99,6 +105,7 @@ class TestManager<TEntity extends object> {
   ): Promise<IResponse<TEntity>> => {
     const response = await this.request
       .put(`${this.defaultRouter}/${this.entity[searchKey]}`)
+      .auth(username, password)
       .send(body);
 
     if (
@@ -128,7 +135,7 @@ class TestManager<TEntity extends object> {
   /**
    * Set entity
    */
-  protected setEntity = (entity: TEntity) => {
+  protected setEntity = (entity: TEntity): void => {
     this.entity = entity;
   };
 }

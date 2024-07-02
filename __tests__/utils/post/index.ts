@@ -4,10 +4,10 @@ import TestManager, {
   ITestManagerParams,
 } from '../test-manager';
 import { HTTP_STATUSES, RouterPaths } from '../../../src/constants';
-import { IPostView } from '../../../src/features/posts/models/view';
-import { IPostParamsInput } from '../../../src/features/posts/models/input';
 import { ClassReturnType } from '../../../src/types/class-return-type';
 import BlogTestManager from '../blog';
+import { IPostView } from '../../../src/interfaces/entities/post/view';
+import { IPostInputParams } from '../../../src/interfaces/entities/post/input';
 
 class PostTestManager extends TestManager<IPostView> {
   /**
@@ -116,12 +116,12 @@ class PostTestManager extends TestManager<IPostView> {
     }
 
     // Here we try to get blog and set one if get was success
-    this.blogTestManager.getBlogById();
+    await this.blogTestManager.getBlogById();
 
     const { id } = this.blogTestManager.entity;
 
     const { statusCode: updateStatusCode } =
-      await this.updateEntity<IPostParamsInput>(
+      await this.updateEntity<IPostInputParams>(
         {
           title: 'update title',
           content: 'content test update',

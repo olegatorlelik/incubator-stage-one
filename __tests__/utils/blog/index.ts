@@ -4,8 +4,8 @@ import TestManager, {
   ITestManagerParams,
 } from '../test-manager';
 import { HTTP_STATUSES } from '../../../src/constants';
-import { IBlogInputParams } from '../../../src/features/blogs/models/input';
-import { IBlogView } from '../../../src/features/blogs/models/view';
+import { IBlogView } from '../../../src/interfaces/entities/blog/view';
+import { IBlogInputParams } from '../../../src/interfaces/entities/blog/input';
 
 const updateTestTitleWebsiteUrl = 'https://www.example.com/path/to/page/update';
 
@@ -17,7 +17,6 @@ class BlogTestManager extends TestManager<IBlogView> {
     super(params);
 
     this.entity = {
-      id: '1',
       name: 'Test name',
       websiteUrl: 'https://www.example.com/path/to/page',
       description: 'test description',

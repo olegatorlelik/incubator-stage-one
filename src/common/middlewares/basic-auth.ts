@@ -1,6 +1,6 @@
 import { Response, Request, NextFunction } from 'express';
 import auth from 'basic-auth';
-import { HTTP_STATUSES } from '../../constants';
+import { HTTP_STATUSES, password, username } from '../../constants';
 
 const basicAuth = (req: Request, res: Response, next: NextFunction) => {
   if (
@@ -11,9 +11,6 @@ const basicAuth = (req: Request, res: Response, next: NextFunction) => {
 
     return;
   }
-
-  const username = 'admin';
-  const password = 'qwerty';
 
   const user = auth(req);
 
