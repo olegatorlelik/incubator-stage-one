@@ -5,15 +5,6 @@ import blogsModel from '../../blogs/models';
 
 class PostRepository {
   /**
-   * Custom validation for check existing blog by id
-   */
-  static checkExistingBlog = async (id: string): Promise<boolean> => {
-    const result = await blogsModel.exists({ id });
-
-    return Boolean(result);
-  };
-
-  /**
    * Get posts
    */
   public posts = async (): Promise<IPostView[]> => postModel.find();
@@ -45,8 +36,20 @@ class PostRepository {
   /**
    * Adding new post
    */
-  public addPost = async (post: IPostInputParams): Promise<IPostView | void> =>
-    postModel.create<IPostInputParams>(post);
+  public addPost = async (
+    post: IPostInputParams
+  ): Promise<IPostView | void> => {
+    const blog = await blogsModel.findOne({ id: post?.blogId });
+
+    if (!blog) {
+      return;
+    }
+
+    return postModel.create<IPostInputParams>({
+      ...post,
+      blogName: blog.name,
+    });
+  };
 
   /**
    * Update post
