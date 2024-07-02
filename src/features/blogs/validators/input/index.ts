@@ -1,5 +1,5 @@
 import { TValidateSchema } from '../../../../interfaces/i-validate-schema';
-import { IBlogInputParams } from '../../../../features/blogs/models/input';
+import { IBlogInputParams } from '../../../../interfaces/entities/blog/input';
 
 const input: TValidateSchema<IBlogInputParams> = {
   name: {

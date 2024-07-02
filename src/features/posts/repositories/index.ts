@@ -1,77 +1,69 @@
-import db from '../../../db';
-import { IPostView } from '../models/view';
-import { IPostParamsInput } from '../models/input';
-import { IBlogView } from '../../blogs/models/view';
-import _ from 'lodash';
+import { IPostView } from '../../../interfaces/entities/post/view';
+import { IPostInputParams } from '../../../interfaces/entities/post/input';
+import postModel from '../models';
+import blogsModel from '../../blogs/models';
 
 class PostRepository {
   /**
    * Get posts
    */
-  public get posts(): IPostView[] {
-    return db.getData('posts');
-  }
-
-  /**
-   * Get blogs ( need to find blogName and create relation )
-   */
-  public get blogs(): IBlogView[] {
-    return db.getData('blogs');
-  }
+  public posts = async (): Promise<IPostView[]> => postModel.find();
 
   /**
    * Get single post by id
    */
-  public getPostById = (postId: IPostView['id']): IPostView | void => {
-    const postById = this.posts.find(({ id }) => id === postId);
+  public getPostById = async (
+    id: IPostView['id']
+  ): Promise<IPostView | void> => {
+    const result = await postModel.findOne({ id });
 
-    if (!postById) {
+    if (!result) {
       return;
     }
 
-    return postById;
+    return result;
   };
 
   /**
    * Remove post
    */
-  public removePost = (id: IPostView['id']): void => {
-    const updatedPost = this.posts.filter((post) => post.id !== id);
+  public removePost = async (id: IPostView['id']): Promise<boolean> => {
+    const result = await postModel.deleteOne({ id });
 
-    db.updateData('posts', updatedPost);
+    return result.acknowledged;
   };
 
   /**
    * Adding new post
    */
-  public addPost = (post: IPostParamsInput): IPostView | void => {
-    const { name } = _.find(this.blogs, { id: post.blogId }) ?? {};
+  public addPost = async (
+    post: IPostInputParams
+  ): Promise<IPostView | void> => {
+    const blog = await blogsModel.findOne({ id: post?.blogId });
 
-    if (!name) {
+    if (!blog) {
       return;
     }
 
-    const newPost = {
-      id: String(this.posts.length + 1),
-      blogName: name,
+    return postModel.create<IPostInputParams>({
       ...post,
-    };
-
-    db.updateData('posts', [...this.posts, newPost]);
-
-    return newPost;
+      blogName: blog.name,
+    });
   };
 
   /**
    * Update post
    */
-  public updatePost = (post: IPostView) => {
-    db.updateData(
-      'posts',
-      this.posts.map((item) =>
-        post.id === item.id ? { ...item, ...post } : item
-      )
+  public updatePost = async (
+    post: IPostInputParams,
+    id: IPostView['id']
+  ): Promise<boolean> => {
+    const result = await postModel.updateOne<IPostInputParams>(
+      { id },
+      { $set: post }
     );
+
+    return result.acknowledged;
   };
 }
 

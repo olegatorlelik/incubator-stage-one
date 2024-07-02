@@ -1,4 +1,5 @@
-export type TUriParams<TParams extends Record<string, string> = any> =
-  TParams & {
-    id: string;
-  };
+export type TUriParams<
+  TParams extends Record<string, string> = Record<string, string>,
+> = TParams & {
+  id: string;
+};

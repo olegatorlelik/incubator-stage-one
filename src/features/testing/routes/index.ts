@@ -8,8 +8,8 @@ const testingRepository = new TestingRepositories();
 /**
  * Clear all from db
  */
-router.delete('/all-data', (req, res) => {
-  testingRepository.clearData();
+router.delete('/all-data', async (req, res) => {
+  await testingRepository.clearData();
 
   res.status(HTTP_STATUSES.NO_CONTENT_204).send();
 });

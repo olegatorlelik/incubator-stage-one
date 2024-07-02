@@ -2,11 +2,12 @@ import app from '../../../src/app';
 import { HTTP_STATUSES, RouterPaths } from '../../../src/constants';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import supertest from 'supertest';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
+import supertest from 'supertest';
 import request from 'supertest';
 import BlogTestManager from '../../utils/blog';
+import { connect, disconnect } from '../../utils/mongo-db-memory-helper';
 
 describe(RouterPaths.blogs, () => {
   const req: supertest.SuperTest<supertest.Test> = request(app);
@@ -16,7 +17,12 @@ describe(RouterPaths.blogs, () => {
     defaultRouter: RouterPaths.blogs,
   });
 
+  /**
+   * Connect and clear database before start test
+   */
   beforeAll(async () => {
+    await connect();
+
     const res = await blogTestManager.clearData();
 
     expect(res.statusCode).toBe(HTTP_STATUSES.NO_CONTENT_204);
@@ -42,7 +48,7 @@ describe(RouterPaths.blogs, () => {
     await blogTestManager.getBlogById();
   });
 
-  it('Should return video by id', async () => {
+  it('Should return blog by id', async () => {
     await blogTestManager.getBlogById();
   });
 
@@ -56,5 +62,10 @@ describe(RouterPaths.blogs, () => {
     await blogTestManager.updateBlog({
       statusCode: HTTP_STATUSES.NO_CONTENT_204,
     });
+  });
+
+  afterAll(async () => {
+    await blogTestManager.clearData();
+    await disconnect();
   });
 });
