@@ -2,6 +2,7 @@
 FROM node:18.17.0 AS BUILD_IMAGE_INCUBATOR_STAGE_ONE
 WORKDIR ./
 COPY package*.json ./
+COPY yarn.lock ./
 RUN yarn install --frozen-lockfile
 COPY . .
 RUN yarn run build
