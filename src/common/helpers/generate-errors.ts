@@ -1,5 +1,5 @@
 import { IErrorField } from '../../interfaces';
-import { ValidationError } from 'express-validator/src/base';
+import { ValidationError } from 'express-validator';
 
 /**
  * Generate error array for custom error middleware
