@@ -1,4 +1,4 @@
-import { ParamSchema } from 'express-validator/src/middlewares/schema';
+import { ParamSchema } from 'express-validator';
 
 export type TValidateSchema<T extends Record<string, any>> = Record<
   keyof T,
