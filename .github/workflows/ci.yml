@@ -25,4 +25,5 @@ jobs:
           script:
             rm -rf ~/incubator-stage-one;
             git clone git@github.com:olegatorlelik/incubator-stage-one.git;
+            mv .env ~/incubator-stage-one/.env
             bash ~/incubator-stage-one/build.sh
