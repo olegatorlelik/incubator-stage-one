@@ -8,12 +8,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Make envfile
-        uses: SpicyPizza/create-envfile@v2.0
-        with:
-          envkey_MONGO_DB_CLUSTER_PASSWORD: ${{ secrets.MONGO_DB_CLUSTER_PASSWORD }}
-          directory: .
-          file_name: .env
+      - uses: actions/checkout@v2
+      - name: Create .env file
+        run: |
+          echo "MONGO_DB_CLUSTER_PASSWORD=${{ secrets.MONGO_DB_CLUSTER_PASSWORD }}" >> .env
 
       - uses: actions/checkout@v2
       - name: Push to server
@@ -25,4 +23,5 @@ jobs:
           script:
             rm -rf ~/incubator-stage-one;
             git clone git@github.com:olegatorlelik/incubator-stage-one.git;
+            mv .env ~/incubator-stage-one/.env
             bash ~/incubator-stage-one/build.sh
