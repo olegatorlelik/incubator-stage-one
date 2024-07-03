@@ -13,6 +13,7 @@ jobs:
         with:
           envkey_MONGO_DB_CLUSTER_PASSWORD: ${{ secrets.MONGO_DB_CLUSTER_PASSWORD }}
           directory: ~/incubator-stage-one
+          file_name: .env
 
       - uses: actions/checkout@v2
       - name: Push to server
