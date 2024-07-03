@@ -12,7 +12,6 @@ jobs:
         uses: SpicyPizza/create-envfile@v2.0
         with:
           envkey_MONGO_DB_CLUSTER_PASSWORD: ${{ secrets.MONGO_DB_CLUSTER_PASSWORD }}
-          directory: ./
           file_name: .env
 
       - uses: actions/checkout@v2
