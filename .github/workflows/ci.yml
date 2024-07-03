@@ -11,8 +11,9 @@ jobs:
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v2.0
         with:
-          envkey_MONGO_DB_CLUSTER_PASSWORD: ${{ secrets.MONGO_DB_CLUSTER_PASSWORD }}
+          envkey_SECRET_KEY: ${{ secrets.MONGO_DB_CLUSTER_PASSWORD }}
           directory: ~/incubator-stage-one
+          file_name: .env
 
       - uses: actions/checkout@v2
       - name: Push to server
