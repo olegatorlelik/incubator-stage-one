@@ -92,7 +92,10 @@ class BlogsRepository extends MongoFieldWorker<IBlogView, TDocument> {
       postModel.exists({ blogId: id }),
     ]);
 
-    if (!updateBlogResult.acknowledged) {
+    if (
+      !updateBlogResult.acknowledged ||
+      updateBlogResult.modifiedCount === 0
+    ) {
       return false;
     }
 
