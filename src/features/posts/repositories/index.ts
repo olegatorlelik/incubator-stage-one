@@ -36,7 +36,7 @@ class PostRepository extends MongoFieldWorker<IPostView, TDocumentPost> {
   public removePost = async (id: IPostView['id']): Promise<boolean> => {
     const result = await postModel.deleteOne({ id });
 
-    return result.acknowledged;
+    return result.acknowledged && result.deletedCount !== 0;
   };
 
   /**
