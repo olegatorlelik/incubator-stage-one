@@ -39,7 +39,7 @@ class BlogsRepository extends MongoFieldWorker<IBlogView, TDocument> {
 
     const result = await postModel.deleteMany({ blogId: id });
 
-    return result.acknowledged;
+    return result.acknowledged && result?.deletedCount !== 0;
   };
 
   /**

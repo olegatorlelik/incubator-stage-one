@@ -86,6 +86,8 @@ router.delete('/:id', async (req: Request<TUriParams>, res) => {
   const { params } = req;
   const isSuccess = await postRepository.removePost(params?.id);
 
+  console.log({ isSuccess });
+
   if (!isSuccess) {
     res.status(HTTP_STATUSES.NOT_FOUND_404).send();
 
