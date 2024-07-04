@@ -20,6 +20,10 @@ class PostRepository extends MongoFieldWorker<IPostView, TDocumentPost> {
   public getPostById = async (
     id: IPostView['id']
   ): Promise<IPostView | void> => {
+    if (!id) {
+      return;
+    }
+
     const result = await postModel
       .findOne({ id })
       .select(this.unnecessaryFields);
@@ -28,7 +32,7 @@ class PostRepository extends MongoFieldWorker<IPostView, TDocumentPost> {
       return;
     }
 
-    return result;
+    return result.toObject();
   };
 
   /**
