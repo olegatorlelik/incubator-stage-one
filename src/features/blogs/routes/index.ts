@@ -90,7 +90,7 @@ router.delete('/:id', async (req: Request<TUriParams>, res) => {
   const isSuccess = await blogsRepository.removeBlog(params?.id);
 
   if (!isSuccess) {
-    res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
+    res.status(HTTP_STATUSES.NOT_FOUND_404);
 
     return;
   }
