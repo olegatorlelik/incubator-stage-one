@@ -85,7 +85,7 @@ class PostRepository extends MongoFieldWorker<IPostView, TDocumentPost> {
       { $set: post }
     );
 
-    return result.acknowledged;
+    return result.acknowledged && result.modifiedCount !== 0;
   };
 }
 

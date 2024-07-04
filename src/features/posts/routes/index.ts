@@ -70,7 +70,7 @@ router.put(
     const isSuccess = await postRepository.updatePost(body, params?.id);
 
     if (!isSuccess) {
-      res.status(HTTP_STATUSES.BAD_REQUEST_400).send();
+      res.status(HTTP_STATUSES.NOT_FOUND_404).send();
 
       return;
     }
