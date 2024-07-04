@@ -83,6 +83,10 @@ class BlogsRepository extends MongoFieldWorker<IBlogView, TDocument> {
     blog: IBlogInputParams,
     id: IBlogView['id']
   ): Promise<boolean> => {
+    if (!id) {
+      return false;
+    }
+
     const [updateBlogResult, existingPost] = await Promise.all([
       blogsModel.updateOne({ id }, { $set: blog }),
       postModel.exists({ blogId: id }),
