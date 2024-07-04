@@ -3,6 +3,7 @@ import { IPostInputParams } from '../../../interfaces/entities/post/input';
 import postModel from '../models';
 import blogsModel from '../../blogs/models';
 import MongoFieldWorker from '../../../common/services/mongo-field-worker';
+import { v4 as uuidv4 } from 'uuid';
 
 type TDocumentPost = InstanceType<typeof postModel>;
 
@@ -53,6 +54,7 @@ class PostRepository extends MongoFieldWorker<IPostView, TDocumentPost> {
 
     const posts = await postModel.create<IPostInputParams>({
       ...post,
+      id: uuidv4(),
       blogName: blog.name,
     });
 
