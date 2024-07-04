@@ -2,12 +2,16 @@ import { IPostView } from '../../../interfaces/entities/post/view';
 import { IPostInputParams } from '../../../interfaces/entities/post/input';
 import postModel from '../models';
 import blogsModel from '../../blogs/models';
+import MongoFieldWorker from '../../../common/services/mongo-field-worker';
 
-class PostRepository {
+type TDocumentPost = InstanceType<typeof postModel>;
+
+class PostRepository extends MongoFieldWorker<IPostView, TDocumentPost> {
   /**
    * Get posts
    */
-  public posts = async (): Promise<IPostView[]> => postModel.find();
+  public posts = async (): Promise<IPostView[]> =>
+    postModel.find().select(this.unnecessaryFields);
 
   /**
    * Get single post by id
@@ -15,7 +19,9 @@ class PostRepository {
   public getPostById = async (
     id: IPostView['id']
   ): Promise<IPostView | void> => {
-    const result = await postModel.findOne({ id });
+    const result = await postModel
+      .findOne({ id })
+      .select(this.unnecessaryFields);
 
     if (!result) {
       return;
@@ -45,10 +51,16 @@ class PostRepository {
       return;
     }
 
-    return postModel.create<IPostInputParams>({
+    const posts = await postModel.create<IPostInputParams>({
       ...post,
       blogName: blog.name,
     });
+
+    if (!posts) {
+      return;
+    }
+
+    return this.pickFields(posts);
   };
 
   /**
