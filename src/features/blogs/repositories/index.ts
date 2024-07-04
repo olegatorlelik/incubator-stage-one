@@ -11,7 +11,7 @@ class BlogsRepository extends MongoFieldWorker<IBlogView, TDocument> {
    * Get blogs
    */
   public blogs = async (): Promise<IBlogView[] | void> => {
-    return blogsModel.find({}, { _id: 0, __v: 0 });
+    return blogsModel.find().select(this.unnecessaryFields);
   };
 
   /**
