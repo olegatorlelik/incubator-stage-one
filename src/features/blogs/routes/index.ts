@@ -73,7 +73,7 @@ router.put(
     const isSuccess = await blogsRepository.updateBlog(body, params?.id);
 
     if (!isSuccess) {
-      res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
+      res.status(HTTP_STATUSES.NOT_FOUND_404).send();
 
       return;
     }
