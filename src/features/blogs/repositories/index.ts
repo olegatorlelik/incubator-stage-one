@@ -33,11 +33,13 @@ class BlogsRepository extends MongoFieldWorker<IBlogView, TDocument> {
       return false;
     }
 
-    if (existingPost) {
-      await postModel.deleteMany({ blogId: id });
+    if (!existingPost) {
+      return false;
     }
 
-    return true;
+    const result = await postModel.deleteMany({ blogId: id });
+
+    return result.acknowledged;
   };
 
   /**
