@@ -3,6 +3,7 @@ import blogsModel from '../models';
 import postModel from '../../posts/models';
 import { IBlogInputParams } from '../../../interfaces/entities/blog/input';
 import MongoFieldWorker from '../../../common/services/mongo-field-worker';
+import { v4 as uuidv4 } from 'uuid';
 
 type TDocument = InstanceType<typeof blogsModel>;
 
@@ -48,7 +49,10 @@ class BlogsRepository extends MongoFieldWorker<IBlogView, TDocument> {
   public addBlog = async (
     blog: IBlogInputParams
   ): Promise<IBlogView | void> => {
-    const result = await blogsModel.create<IBlogInputParams>(blog);
+    const result = await blogsModel.create<IBlogInputParams>({
+      ...blog,
+      id: uuidv4(),
+    });
 
     if (!result) {
       return;
