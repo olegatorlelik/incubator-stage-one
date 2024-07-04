@@ -76,6 +76,10 @@ class PostRepository extends MongoFieldWorker<IPostView, TDocumentPost> {
     post: IPostInputParams,
     id: IPostView['id']
   ): Promise<boolean> => {
+    if (!id) {
+      return false;
+    }
+
     const result = await postModel.updateOne<IPostInputParams>(
       { id },
       { $set: post }
