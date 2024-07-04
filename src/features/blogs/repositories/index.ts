@@ -18,8 +18,23 @@ class BlogsRepository extends MongoFieldWorker<IBlogView, TDocument> {
   /**
    * Get single blog by id
    */
-  public getBlogById = async (blogId: IBlogView['id']): Promise<IBlogView> =>
-    blogsModel.findOne({ id: blogId }).select(this.unnecessaryFields);
+  public getBlogById = async (
+    blogId: IBlogView['id']
+  ): Promise<IBlogView | void> => {
+    if (!blogId) {
+      return;
+    }
+
+    const blog = await blogsModel
+      .findOne({ id: blogId })
+      .select(this.unnecessaryFields);
+
+    if (!blog) {
+      return;
+    }
+
+    return blog.toObject();
+  };
 
   /**
    * Remove blog
