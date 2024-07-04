@@ -2,19 +2,23 @@ import { IBlogView } from '../../../interfaces/entities/blog/view';
 import blogsModel from '../models';
 import postModel from '../../posts/models';
 import { IBlogInputParams } from '../../../interfaces/entities/blog/input';
+import MongoFieldWorker from '../../../common/services/mongo-field-worker';
 
-class BlogsRepository {
+type TDocument = InstanceType<typeof blogsModel>;
+
+class BlogsRepository extends MongoFieldWorker<IBlogView, TDocument> {
   /**
    * Get blogs
    */
-  public blogs = async (): Promise<IBlogView[] | void> => blogsModel.find();
+  public blogs = async (): Promise<IBlogView[] | void> => {
+    return blogsModel.find().select(this.unnecessaryFields);
+  };
 
   /**
    * Get single blog by id
    */
-  public getBlogById = async (
-    blogId: IBlogView['id']
-  ): Promise<IBlogView | void | null> => blogsModel.findOne({ id: blogId });
+  public getBlogById = async (blogId: IBlogView['id']): Promise<IBlogView> =>
+    blogsModel.findOne({ id: blogId }).select(this.unnecessaryFields);
 
   /**
    * Remove blog
@@ -39,8 +43,17 @@ class BlogsRepository {
   /**
    * Adding new blog
    */
-  public addBlog = async (blog: IBlogInputParams): Promise<IBlogView> =>
-    blogsModel.create<IBlogInputParams>(blog);
+  public addBlog = async (
+    blog: IBlogInputParams
+  ): Promise<IBlogView | void> => {
+    const result = await blogsModel.create<IBlogInputParams>(blog);
+
+    if (!result) {
+      return;
+    }
+
+    return this.pickFields(result);
+  };
 
   /**
    * Update blog
