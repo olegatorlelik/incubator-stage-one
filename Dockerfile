@@ -15,5 +15,6 @@ COPY --from=BUILD_IMAGE_INCUBATOR_STAGE_ONE ./package*.json ./
 COPY --from=BUILD_IMAGE_INCUBATOR_STAGE_ONE ./yarn.lock ./
 COPY --from=BUILD_IMAGE_INCUBATOR_STAGE_ONE ./dist ./dist
 COPY --from=BUILD_IMAGE_INCUBATOR_STAGE_ONE ./node_modules ./node_modules
+COPY --from=BUILD_IMAGE_INCUBATOR_STAGE_ONE ./.env ./
 EXPOSE 3005
 CMD ["yarn", "start"]
